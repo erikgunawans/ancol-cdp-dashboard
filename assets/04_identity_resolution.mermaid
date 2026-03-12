@@ -1,0 +1,38 @@
+%%{init: {'theme': 'default'}}%%
+flowchart TB
+    subgraph INPUT["Fragmented Identity Records from Multiple Sources"]
+        R1["ancol.com\nemail: budi@mail.com\nname: Budi Santoso"]
+        R2["WhatsApp via Arsi\nphone: +6281234567890\nchat: asking Dufan prices"]
+        R3["Loyalty Program\nloyalty_id: ANC-50123\nemail: budi@mail.com"]
+        R4["Wahana POS\ngelang_id: GEL-99887\nlinked to ticket TKT-445"]
+        R5["Telkom Movement\ndevice_id: DEV-XYZ\nlocation: Ancol geofence"]
+        R6["F&B POS\npayment: Visa *4589\nno identity key"]
+    end
+
+    subgraph PHASE1["Phase 1: Deterministic Matching — resolves approx 65%"]
+        DM["Exact Match Engine\nMatch on: email, phone,\nloyalty_id, gelang_id"]
+        LINK1["R1 matched R3\nSame email:\nbudi@mail.com"]
+        LINK2["R4 linked via\nticket purchase to R1\nTKT-445 = budi@mail.com"]
+    end
+
+    subgraph PHASE2["Phase 2: Probabilistic Matching — resolves approx 15% more"]
+        PM["Fuzzy Match Engine\nName similarity +\nsame visit date +\npayment pattern"]
+        LINK3["R6 linked to R1\nSame Visa *4589 used\non ancol.com checkout\nConfidence: 87%"]
+    end
+
+    subgraph PHASE3["Phase 3: Graph-Based Resolution — resolves approx 5% more"]
+        GM["Transitive Closure\nIf A=B and B=C\nthen A=B=C"]
+        LINK4["R2 linked to R1 to R3\nPhone from WhatsApp\nlinked via OTP verification\non ancol.com account"]
+    end
+
+    subgraph OUTPUT["Unified Golden Record in dim_customer"]
+        GOLDEN["ancol_customer_id: BUDI-001\n\nname: Budi Santoso\nemail: budi@mail.com\nphone: +6281234567890\nloyalty_id: ANC-50123\ngelang_id: GEL-99887\ndevice_id: DEV-XYZ\npayment_tokens: Visa *4589\n\nidentity_confidence: 94%\nsources_merged: 6\nlast_resolved: 2026-03-08"]
+    end
+
+    UNRESOLVED["R5 Telkom\nCannot resolve:\nanonymized device_id\nUsed for aggregated\nanalytics only"]
+
+    INPUT --> PHASE1
+    PHASE1 --> PHASE2
+    PHASE2 --> PHASE3
+    PHASE3 --> OUTPUT
+    R5 --> UNRESOLVED

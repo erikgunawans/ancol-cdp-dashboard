@@ -1,0 +1,88 @@
+%%{init: {'theme': 'default'}}%%
+graph TB
+    subgraph L8["LAYER 8: GOVERNANCE, SECURITY & COMPLIANCE — Axiara SENTINEL"]
+        direction LR
+        S1["UU PDP Compliance"]
+        S2["AI Ethics & Bias Monitoring"]
+        S3["Model Drift Detection"]
+        S4["Kill-Switch Controls"]
+        S5["Audit Logs & Access Control"]
+        S6["Regulatory Change Monitor"]
+    end
+
+    subgraph L7["LAYER 7: ANALYTICS & VISUALIZATION — Terralogiq / Looker"]
+        direction LR
+        D1["Executive Command Center"]
+        D2["CX Operations Dashboard"]
+        D3["Voice of Customer VoC"]
+        D4["Marketing Performance"]
+        D5["Property Cross-Sell Pipeline"]
+    end
+
+    subgraph L6["LAYER 6: ACTIVATION & ORCHESTRATION"]
+        direction LR
+        A1["MoEngage\nMarketing Campaigns\nEmail / Push / Web"]
+        A2["Custom Orchestrator\nChannel Routing\nFrequency Capping"]
+        A3["Arsi Contact Center\nWhatsApp / Voice\nChat / Social"]
+    end
+
+    subgraph L5["LAYER 5: AI/ML INTELLIGENCE — Axiara / Vertex AI"]
+        direction LR
+        M1["Visitor Intelligence\nFootfall Forecast\nChurn Prediction"]
+        M2["Revenue Intelligence\nDynamic Pricing\nCross-Sell Propensity"]
+        M3["Experience Intelligence\nRecommendations\nSentiment Analysis"]
+        M4["Operational Intelligence\nF&B Demand Forecast\nMaintenance Prediction"]
+    end
+
+    subgraph L4["LAYER 4: CDP CORE ENGINE — Terralogiq + Axiara"]
+        direction LR
+        C1["Identity Resolution Engine\nDeterministic + Probabilistic"]
+        C2["Segmentation Engine\nRule + ML + Real-time"]
+        C3["Event Stream Processor\nTrigger Rules"]
+        C4["Customer DNA Profiler\nLifestyle Scoring"]
+    end
+
+    subgraph L3["LAYER 3: DATA STORAGE — Terralogiq / BigQuery + Redis"]
+        direction LR
+        BQ1["BigQuery Raw Zone"]
+        BQ2["BigQuery Standardized Zone"]
+        BQ3["BigQuery Curated Zone"]
+        RD["Memorystore Redis Hot Cache"]
+    end
+
+    subgraph L2["LAYER 2: PROCESSING & GOVERNANCE"]
+        direction LR
+        P1["Cloud DLP\nPII Detection\nDe-identification"]
+        P2["Standardization Pipeline\nFormat Normalization"]
+        P3["SENTINEL Data Policy Enforcement"]
+    end
+
+    subgraph L1["LAYER 1: DATA INGESTION — Terralogiq / Pub/Sub + Dataflow"]
+        direction LR
+        I1["Batch Path\nCDC / Dataflow\nHourly / Nightly"]
+        I2["Real-Time Path\nPub/Sub / Streaming\nSub-minute"]
+    end
+
+    subgraph Sources["DATA SOURCES"]
+        direction LR
+        DS1["ancol.com Ticketing"]
+        DS2["Loyalty Program"]
+        DS3["F&B POS Systems"]
+        DS4["Hotel/Resort Booking"]
+        DS5["Wahana Checkpoint POS"]
+        DS6["Arsi Contact Center"]
+        DS7["MoEngage Events"]
+        DS8["Telkom Movement Data"]
+        DS9["Ancol Mobile App"]
+        DS10["OTA Partners"]
+    end
+
+    Sources --> L1
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    L4 --> L5
+    L5 --> L6
+    L4 --> L6
+    L3 --> L7
+    L5 --> L7

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0D1117;
+    --bg-secondary: #161B22;
+    --bg-card: #1C2333;
+    --crimson: #C41E3A;
+    --crimson-glow: rgba(196, 30, 58, 0.15);
+    --crimson-soft: #E8384F;
+    --teal: #2DD4BF;
+    --teal-glow: rgba(45, 212, 191, 0.12);
+    --gold: #F59E0B;
+    --gold-glow: rgba(245, 158, 11, 0.12);
+    --blue: #3B82F6;
+    --blue-glow: rgba(59, 130, 246, 0.12);
+    --text-primary: #F0F6FC;
+    --text-secondary: #8B949E;
+    --text-muted: #6E7681;
+    --border: rgba(255,255,255,0.06);
+    --border-accent: rgba(196, 30, 58, 0.3);
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,30,58,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-container {
+    position: relative;
+    z-index: 1;
+    padding: 28px 32px 20px 32px;
+    height: 297mm;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--crimson), #E8384F);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: white;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.5px;
+  }
+
+  .logo-text span { color: var(--crimson); }
+
+  .header-meta {
+    text-align: right;
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.6;
+  }
+
+  .confidential-badge {
+    display: inline-block;
+    background: rgba(196,30,58,0.12);
+    color: var(--crimson-soft);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    border: 1px solid rgba(196,30,58,0.2);
+  }
+
+  .title-section {
+    margin-bottom: 16px;
+  }
+
+  .doc-type {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--crimson-soft);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 6px;
+  }
+
+  .main-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+
+  .main-title .highlight {
+    background: linear-gradient(135deg, var(--crimson), #E8384F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-width: 85%;
+  }
+
+  .gap-panel {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--crimson), var(--crimson-soft));
+    border-radius: 3px 0 0 3px;
+  }
+
+  .gap-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--crimson-soft);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .metrics-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .metric-box {
+    text-align: center;
+    flex: 1;
+    padding: 8px 6px;
+  }
+
+  .metric-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .metric-value.red { color: var(--crimson-soft); }
+  .metric-value.teal { color: var(--teal); }
+  .metric-value.gold { color: var(--gold); }
+  .metric-value.blue { color: var(--blue); }
+
+  .metric-label {
+    font-size: 8.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .metric-divider {
+    width: 1px;
+    height: 48px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .gap-insight {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(196,30,58,0.06);
+    border: 1px solid rgba(196,30,58,0.1);
+    border-radius: 6px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .gap-insight strong { color: var(--text-primary); font-weight: 600; }
+
+  .section-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .solution-section {
+    margin-bottom: 14px;
+  }
+
+  .flow-container {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .flow-step {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 12px 10px;
+  }
+
+  .flow-step.step-source { border-top: 2px solid var(--blue); }
+  .flow-step.step-engine { border-top: 2px solid var(--crimson-soft); }
+  .flow-step.step-output { border-top: 2px solid var(--teal); }
+
+  .flow-step-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    margin-bottom: 7px;
+  }
+
+  .flow-step.step-source .flow-step-icon { background: var(--blue-glow); }
+  .flow-step.step-engine .flow-step-icon { background: var(--crimson-glow); }
+  .flow-step.step-output .flow-step-icon { background: var(--teal-glow); }
+
+  .flow-step-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .flow-step-desc {
+    font-size: 8.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 16px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .usecases-section {
+    margin-bottom: 14px;
+  }
+
+  .uc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .uc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 12px 10px;
+    position: relative;
+  }
+
+  .uc-card::before {
+    content: attr(data-number);
+    position: absolute;
+    top: 8px; right: 10px;
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  .uc-card-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    padding-right: 40px;
+  }
+
+  .uc-card-desc {
+    font-size: 8.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .uc-card-impact {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  .uc-card:nth-child(1) .uc-card-impact { background: var(--crimson-glow); color: var(--crimson-soft); border: 1px solid rgba(196,30,58,0.15); }
+  .uc-card:nth-child(2) .uc-card-impact { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(45,212,191,0.15); }
+  .uc-card:nth-child(3) .uc-card-impact { background: var(--gold-glow); color: var(--gold); border: 1px solid rgba(245,158,11,0.15); }
+
+  .sprint-section {
+    background: linear-gradient(135deg, rgba(196,30,58,0.08), rgba(196,30,58,0.03));
+    border: 1px solid var(--border-accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .sprint-left { flex: 1; }
+
+  .sprint-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .sprint-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .sprint-desc {
+    font-size: 9.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .sprint-desc strong { color: var(--text-primary); font-weight: 600; }
+
+  .sprint-right {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .sprint-phase {
+    text-align: center;
+    width: 80px;
+    padding: 10px 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+
+  .sprint-phase-week {
+    font-size: 7.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .sprint-phase-name {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .sprint-phase-detail {
+    font-size: 7.5px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .sprint-phase:nth-child(1) { border-top: 2px solid var(--blue); }
+  .sprint-phase:nth-child(2) { border-top: 2px solid var(--crimson-soft); }
+  .sprint-phase:nth-child(3) { border-top: 2px solid var(--teal); }
+
+  .compliance-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .compliance-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+
+  .compliance-icon {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .compliance-text {
+    font-size: 8.5px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .compliance-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    display: block;
+    font-size: 9px;
+  }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .footer-contact {
+    font-size: 9px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .footer-contact strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .footer-right {
+    text-align: right;
+    font-size: 8px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .footer-tagline {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--crimson-soft);
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="page-container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-mark">Ax</div>
+      <div class="logo-text">AXIARA<span>.AI</span></div>
+    </div>
+    <div class="header-meta">
+      <span class="confidential-badge">CONFIDENTIAL</span><br>
+      Strategic Insight Brief &nbsp;|&nbsp; March 2026
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title-section">
+    <div class="doc-type">Prepared for PT Pembangunan Jaya Ancol Tbk</div>
+    <div class="main-title">
+      The <span class="highlight">IDR 10 Trillion Question</span>:<br>
+      How AI Bridges Recreation Data to Property Revenue
+    </div>
+    <div class="subtitle">
+      Ancol's 10 million annual visitors generate one of Indonesia's richest behavioral datasets &mdash; but today, none of that intelligence reaches the property division. Here's how governed AI changes the equation.
+    </div>
+  </div>
+
+  <!-- THE GAP -->
+  <div class="gap-panel">
+    <div class="gap-label">&#9889; The Revenue Architecture Gap</div>
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-value blue">10M</div>
+        <div class="metric-label">Annual Visitors<br>(Dufan, Sea World, Samudra)</div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-box">
+        <div class="metric-value red">71.6%</div>
+        <div class="metric-label">Revenue from<br>Ticket Sales (IDR 907B)</div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-box">
+        <div class="metric-value gold">0.4%</div>
+        <div class="metric-label">Revenue from<br>Property (IDR 5.67B)</div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-box">
+        <div class="metric-value teal">IDR 10T+</div>
+        <div class="metric-label">Property Pipeline<br>(Seafront, West Ancol TOD)</div>
+      </div>
+    </div>
+    <div class="gap-insight">
+      <strong>The core issue:</strong> PJAA's recreation and property segments operate as disconnected businesses. The behavioral data from 10 million visitors &mdash; purchase patterns, visit frequency, spend levels, loyalty engagement &mdash; is not being used to identify and nurture high-propensity property buyers. <strong>This is the missing data bridge.</strong>
+    </div>
+  </div>
+
+  <!-- SOLUTION FLOW -->
+  <div class="solution-section">
+    <div class="section-label" style="color: var(--teal);">&#128279; The AI-Powered Data Bridge</div>
+    <div class="flow-container">
+      <div class="flow-step step-source">
+        <div class="flow-step-icon">&#128202;</div>
+        <div class="flow-step-title">Recreation Behavioral Data</div>
+        <div class="flow-step-desc">Visit frequency, spend patterns, attraction preferences, loyalty tier, F&amp;B habits, group composition, seasonal behavior across all Ancol touchpoints.</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step step-engine">
+        <div class="flow-step-icon">&#129504;</div>
+        <div class="flow-step-title">Axiara.AI Intelligence Engine</div>
+        <div class="flow-step-desc">Customer Data Platform with AI lead scoring. Identifies visitors whose behavioral profile predicts high real estate purchase propensity. Governed by SENTINEL.</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step step-output">
+        <div class="flow-step-icon">&#127959;</div>
+        <div class="flow-step-title">Qualified Property Leads</div>
+        <div class="flow-step-desc">Scored, prioritized prospect lists for Jaya Ancol Seafront, Marina Coast, Northland. Automated nurturing with personalized property content and viewing invitations.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP 3 USE CASES -->
+  <div class="usecases-section">
+    <div class="section-label" style="color: var(--crimson-soft);">&#127919; Three Highest-Impact Use Cases from 80 Identified</div>
+    <div class="uc-grid">
+      <div class="uc-card" data-number="UC-01">
+        <div class="uc-card-title">Recreation &rarr; Property Cross-Sell</div>
+        <div class="uc-card-desc">AI identifies Dufan/Sea World loyalists with premium spend patterns as qualified buyers for Seafront and Marina Coast developments. Recreation data becomes a property sales engine.</div>
+        <div class="uc-card-impact">Qualified Leads +200%</div>
+      </div>
+      <div class="uc-card" data-number="UC-02">
+        <div class="uc-card-title">Dynamic Ticket Pricing</div>
+        <div class="uc-card-desc">Real-time price optimization across Dufan, Sea World, and Samudra based on demand, weather, day-of-week, and remaining capacity. Maximizes yield without reducing visitor volume.</div>
+        <div class="uc-card-impact">Revenue/Visitor +12-18%</div>
+      </div>
+      <div class="uc-card" data-number="UC-03">
+        <div class="uc-card-title">OTA Disintermediation</div>
+        <div class="uc-card-desc">Hyper-personalized direct-channel experiences that OTAs cannot replicate. Migrates bookings from Traveloka/Tiket.com to Ancol's own platform, recapturing margins and data.</div>
+        <div class="uc-card-impact">Direct Booking +15%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPRINT CTA -->
+  <div class="sprint-section">
+    <div class="sprint-left">
+      <div class="sprint-label">&#128161; Proposed Engagement</div>
+      <div class="sprint-title">4-Week Discover Sprint &mdash; Zero Risk, Full Clarity</div>
+      <div class="sprint-desc">
+        We don't ask for a long-term commitment upfront. The Discover Sprint maps PJAA's data architecture, validates the cross-sell hypothesis with real data samples, and produces a <strong>Go/No-Go recommendation with projected ROI</strong> &mdash; all within 4 weeks. You only scale what's proven.
+      </div>
+    </div>
+    <div class="sprint-right">
+      <div class="sprint-phase">
+        <div class="sprint-phase-week">Week 1&ndash;2</div>
+        <div class="sprint-phase-name">Discover</div>
+        <div class="sprint-phase-detail">Data audit, stakeholder interviews, use case validation</div>
+      </div>
+      <div class="sprint-phase">
+        <div class="sprint-phase-week">Week 2&ndash;3</div>
+        <div class="sprint-phase-name">Prototype</div>
+        <div class="sprint-phase-detail">Working AI model on sample data, initial lead scoring</div>
+      </div>
+      <div class="sprint-phase">
+        <div class="sprint-phase-week">Week 3&ndash;4</div>
+        <div class="sprint-phase-name">Validate</div>
+        <div class="sprint-phase-detail">Results review, ROI projection, Go/No-Go decision</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE ROW -->
+  <div class="compliance-row">
+    <div class="compliance-item">
+      <div class="compliance-icon">&#128737;</div>
+      <div class="compliance-text">
+        <strong>UU PDP Compliant</strong>
+        AI governance from day one. Full compliance with Indonesia's data protection law.
+      </div>
+    </div>
+    <div class="compliance-item">
+      <div class="compliance-icon">&#127963;</div>
+      <div class="compliance-text">
+        <strong>BUMD-Ready</strong>
+        Fits government procurement frameworks. Sprint model within OPEX budgets.
+      </div>
+    </div>
+    <div class="compliance-item">
+      <div class="compliance-icon">&#128274;</div>
+      <div class="compliance-text">
+        <strong>SENTINEL Governed</strong>
+        Every AI model monitored for bias, drift, and accuracy. Kill-switch controls.
+      </div>
+    </div>
+    <div class="compliance-item">
+      <div class="compliance-icon">&#128203;</div>
+      <div class="compliance-text">
+        <strong>80 Use Cases Mapped</strong>
+        Full catalog across 9 domains &mdash; recreation, property, F&amp;B, MICE, back office, GRC.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-contact">
+      <strong>Erik Gunawan Supriatna</strong><br>
+      Founder &amp; CEO, Axiara.AI (PT Aksara Inovasi Terpadu)<br>
+      hello@axiara.ai &nbsp;|&nbsp; linkedin.com/in/eriksupriatna
+    </div>
+    <div class="footer-right">
+      <div class="footer-tagline">Governed AI. Real Results.</div>
+      End-to-End AI Transformation Partner<br>
+      Jakarta, Indonesia
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

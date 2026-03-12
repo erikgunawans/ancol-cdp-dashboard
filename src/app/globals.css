@@ -1,0 +1,186 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #060D1A;
+  --bg-dark: #060D1A;
+  --text-primary: #F0F6FF;
+  --text-secondary: #8BA3C1;
+  --text-caption: #4D6B8A;
+  --card-bg: #0C1830;
+  --card-border: #1E3A5F;
+  --accent-crimson: #C41E3A;
+  --accent-blue: #0076CC;
+  --sidebar-w: 260px;
+  --sidebar-w-collapsed: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background-color: #060D1A;
+  color: #F0F6FF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  /* Glassmorphism 2.0 — dark surface */
+  .glass-dark {
+    background: rgba(12, 24, 48, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(30, 58, 95, 0.6);
+  }
+
+  /* Gradient mesh background */
+  .mesh-bg {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(0, 118, 204, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(196, 30, 58, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 0%, rgba(20, 184, 166, 0.06) 0%, transparent 50%),
+      #060D1A;
+  }
+
+  /* Glow effect — blue */
+  .glow-blue {
+    box-shadow: 0 0 24px 2px rgba(0, 118, 204, 0.45);
+  }
+
+  /* Glow effect — crimson */
+  .glow-crimson {
+    box-shadow: 0 0 24px 2px rgba(196, 30, 58, 0.45);
+  }
+
+  /* Sidebar active nav link */
+  .nav-active {
+    background: linear-gradient(90deg, rgba(0, 118, 204, 0.15) 0%, transparent 100%);
+    border-left: 3px solid #0076CC;
+  }
+
+  /* Legacy glass (updated for dark) */
+  .glass {
+    background: rgba(12, 24, 48, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .no-scrollbar::-webkit-scrollbar,
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar,
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* iOS safe-area spacing helpers */
+  .pb-safe  { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .pt-safe  { padding-top:    env(safe-area-inset-top,    0px); }
+
+  /* Eliminate 300ms tap delay and prevent double-tap zoom on interactive elements */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Pipeline connector dot animation (DataFlowClient) */
+  .data-dot {
+    position: absolute;
+    top: 50%;
+    margin-top: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: flowData 2s linear infinite;
+  }
+}
+
+@keyframes flowData {
+  0%   { transform: translateX(0);    opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out both;
+}
+
+/* ── Light theme overrides ───────────────────────────────────────────────────
+   Targets compiled Tailwind arbitrary-value selectors so no component changes
+   are needed. Accent colours (blue, crimson, teal, gold) stay the same.
+   ───────────────────────────────────────────────────────────────────────── */
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Body / page shell */
+[data-theme="light"] body {
+  background-color: #F0F5FA;
+  color: #0F172A;
+}
+
+/* Mesh gradient background */
+[data-theme="light"] .mesh-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(0,118,204,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(196,30,58,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 0%,  rgba(20,184,166,0.04) 0%, transparent 50%),
+    #F0F5FA;
+}
+
+/* ── Background colours ── */
+[data-theme="light"] .bg-\[\#060D1A\]    { background-color: #F0F5FA  !important; }
+[data-theme="light"] .bg-\[\#0C1830\]    { background-color: #FFFFFF  !important; }
+[data-theme="light"] .bg-\[\#112040\]    { background-color: #EDF2F7  !important; }
+[data-theme="light"] .bg-\[\#0C1830\]\/50 { background-color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .bg-\[\#0C1830\]\/60 { background-color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .bg-\[\#0C1830\]\/95 { background-color: rgba(255,255,255,0.97) !important; }
+[data-theme="light"] .bg-\[\#060D1A\]\/90 { background-color: rgba(240,245,250,0.95) !important; }
+
+/* ── Border colours ── */
+[data-theme="light"] .border-\[\#1E3A5F\]      { border-color: #CBD5E1 !important; }
+[data-theme="light"] .border-l-\[\#1E3A5F\]    { border-left-color: #CBD5E1 !important; }
+[data-theme="light"] .border-r-\[\#1E3A5F\]    { border-right-color: #CBD5E1 !important; }
+[data-theme="light"] .border-t-\[\#1E3A5F\]    { border-top-color: #CBD5E1 !important; }
+[data-theme="light"] .border-b-\[\#1E3A5F\]    { border-bottom-color: #CBD5E1 !important; }
+
+/* ── Text colours ── */
+[data-theme="light"] .text-\[\#F0F6FF\]  { color: #0F172A !important; }
+[data-theme="light"] .text-\[\#8BA3C1\]  { color: #334155 !important; }
+[data-theme="light"] .text-\[\#4D6B8A\]  { color: #64748B !important; }
+
+/* ── Sidebar nav-active ── */
+[data-theme="light"] .nav-active {
+  background: linear-gradient(90deg, rgba(0,118,204,0.10) 0%, transparent 100%);
+  border-left: 3px solid #0076CC;
+}
+
+/* ── Sidebar hover states ── */
+[data-theme="light"] .hover\:bg-\[\#112040\]:hover { background-color: #E2EAF4 !important; }
+
+/* ── Glassmorphism surface ── */
+[data-theme="light"] .glass-dark {
+  background: rgba(255,255,255,0.80);
+  border: 1px solid rgba(203,213,225,0.8);
+}
+
+/* ── Inline bg on body tag ── */
+[data-theme="light"] .bg-\[\#060D1A\].text-\[\#F0F6FF\] {
+  background-color: #F0F5FA !important;
+  color: #0F172A !important;
+}

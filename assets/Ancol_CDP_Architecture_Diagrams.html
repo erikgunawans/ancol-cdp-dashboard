@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ancol 360° CDP — Architecture Diagrams</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b22;
+    --bg3: #1c2333;
+    --card: #21283b;
+    --border: rgba(255,255,255,0.08);
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #6e7681;
+    --crimson: #C41E3A;
+    --crimson-soft: #E8384F;
+    --teal: #2dd4bf;
+    --blue: #3b82f6;
+    --gold: #f59e0b;
+    --purple: #a78bfa;
+    --green: #34d399;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, rgba(196,30,58,0.15), rgba(59,130,246,0.08));
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .page-header h1 span { color: var(--crimson-soft); }
+
+  .page-header p {
+    color: var(--text2);
+    font-size: 14px;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+  }
+
+  .diagram-section {
+    margin-bottom: 60px;
+    page-break-inside: avoid;
+  }
+
+  .diagram-section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .diagram-section h2 .badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .badge-exec { background: rgba(196,30,58,0.15); color: var(--crimson-soft); }
+  .badge-tech { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .badge-cx { background: rgba(45,212,191,0.15); color: var(--teal); }
+
+  .diagram-desc {
+    color: var(--text2);
+    font-size: 13px;
+    margin-bottom: 20px;
+    max-width: 800px;
+  }
+
+  .mermaid-wrapper {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    overflow-x: auto;
+  }
+
+  .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Override Mermaid styles for dark theme */
+  .mermaid svg {
+    max-width: 100%;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--bg3);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  @media print {
+    body { background: white; color: #222; }
+    .page-header { background: #f0f0f0; }
+    .mermaid-wrapper { background: white; border-color: #ddd; }
+    .diagram-section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Ancol 360° CDP — <span>Architecture Diagrams</span></h1>
+  <p>CONFIDENTIAL | Axiara.AI × Terralogiq | Version 1.0 | March 2026</p>
+</div>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 1: HIGH-LEVEL EIGHT-LAYER ARCHITECTURE     -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 1: Eight-Layer CDP Architecture Overview
+    <span class="badge badge-exec">Executive View</span>
+  </h2>
+  <p class="diagram-desc">
+    The complete Ancol 360° CDP organized into eight distinct layers, from data ingestion at the bottom
+    to governance spanning all layers. Each layer shows the responsible partner (Axiara, Terralogiq, or shared).
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1c2333', 'primaryTextColor': '#e6edf3', 'primaryBorderColor': '#3b82f6', 'lineColor': '#6e7681', 'secondaryColor': '#21283b', 'tertiaryColor': '#161b22', 'fontSize': '13px' }}}%%
+graph TB
+    subgraph L8["🛡️ LAYER 8: GOVERNANCE, SECURITY & COMPLIANCE (Axiara SENTINEL)"]
+        direction LR
+        S1["UU PDP<br/>Compliance"]
+        S2["AI Ethics &<br/>Bias Monitoring"]
+        S3["Model Drift<br/>Detection"]
+        S4["Kill-Switch<br/>Controls"]
+        S5["Audit Logs &<br/>Access Control"]
+        S6["Regulatory<br/>Change Monitor"]
+    end
+
+    subgraph L7["📊 LAYER 7: ANALYTICS & VISUALIZATION (Terralogiq — Looker)"]
+        direction LR
+        D1["Executive<br/>Command Center"]
+        D2["CX Operations<br/>Dashboard"]
+        D3["Voice of Customer<br/>(VoC) Dashboard"]
+        D4["Marketing<br/>Performance"]
+        D5["Property Cross-Sell<br/>Pipeline"]
+    end
+
+    subgraph L6["📡 LAYER 6: ACTIVATION & ORCHESTRATION"]
+        direction LR
+        A1["MoEngage<br/>Marketing Campaigns<br/>Email · Push · Web"]
+        A2["Custom Orchestrator<br/>Channel Routing<br/>Frequency Capping"]
+        A3["Arsi Contact Center<br/>WhatsApp · Voice<br/>Chat · Social"]
+    end
+
+    subgraph L5["🧠 LAYER 5: AI/ML INTELLIGENCE (Axiara — Vertex AI)"]
+        direction LR
+        M1["Visitor Intelligence<br/>Footfall Forecast<br/>Churn Prediction"]
+        M2["Revenue Intelligence<br/>Dynamic Pricing<br/>Cross-Sell Propensity"]
+        M3["Experience Intelligence<br/>Recommendations<br/>Sentiment Analysis"]
+        M4["Operational Intelligence<br/>F&B Demand Forecast<br/>Maintenance Prediction"]
+    end
+
+    subgraph L4["⚙️ LAYER 4: CDP CORE ENGINE (Terralogiq + Axiara)"]
+        direction LR
+        C1["Identity Resolution<br/>Engine<br/>Deterministic + Probabilistic"]
+        C2["Segmentation<br/>Engine<br/>Rule + ML + Real-time"]
+        C3["Event Stream<br/>Processor<br/>Trigger Rules"]
+        C4["Customer DNA<br/>Profiler<br/>Lifestyle Scoring"]
+    end
+
+    subgraph L3["🗄️ LAYER 3: DATA STORAGE (Terralogiq — BigQuery + Redis)"]
+        direction LR
+        BQ1["BigQuery<br/>Raw Zone"]
+        BQ2["BigQuery<br/>Standardized Zone"]
+        BQ3["BigQuery<br/>Curated Zone"]
+        RD["Memorystore<br/>Redis Hot Cache"]
+    end
+
+    subgraph L2["🔒 LAYER 2: PROCESSING & GOVERNANCE"]
+        direction LR
+        P1["Cloud DLP<br/>PII Detection &<br/>De-identification"]
+        P2["Standardization<br/>Pipeline<br/>Format Normalization"]
+        P3["SENTINEL<br/>Data Policy<br/>Enforcement"]
+    end
+
+    subgraph L1["📥 LAYER 1: DATA INGESTION (Terralogiq — Pub/Sub + Dataflow)"]
+        direction LR
+        I1["Batch Path<br/>CDC · Dataflow<br/>Hourly/Nightly"]
+        I2["Real-Time Path<br/>Pub/Sub · Streaming<br/>Sub-minute"]
+    end
+
+    subgraph Sources["🏢 DATA SOURCES"]
+        direction LR
+        DS1["ancol.com<br/>Ticketing"]
+        DS2["Loyalty<br/>Program"]
+        DS3["F&B POS<br/>Systems"]
+        DS4["Hotel/Resort<br/>Booking"]
+        DS5["Wahana<br/>Checkpoint POS"]
+        DS6["Arsi Contact<br/>Center"]
+        DS7["MoEngage<br/>Events"]
+        DS8["Telkom<br/>Movement Data"]
+        DS9["Ancol<br/>Mobile App"]
+        DS10["OTA<br/>Partners"]
+    end
+
+    Sources --> L1
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    L4 --> L5
+    L5 --> L6
+    L4 --> L6
+    L3 --> L7
+    L5 --> L7
+
+    style L8 fill:#2a1525,stroke:#C41E3A,stroke-width:2px,color:#e6edf3
+    style L7 fill:#1a2435,stroke:#3b82f6,stroke-width:1px,color:#e6edf3
+    style L6 fill:#1a2a25,stroke:#2dd4bf,stroke-width:1px,color:#e6edf3
+    style L5 fill:#2a1f35,stroke:#a78bfa,stroke-width:1px,color:#e6edf3
+    style L4 fill:#1a2435,stroke:#f59e0b,stroke-width:1px,color:#e6edf3
+    style L3 fill:#1a2a25,stroke:#34d399,stroke-width:1px,color:#e6edf3
+    style L2 fill:#2a1525,stroke:#C41E3A,stroke-width:1px,color:#e6edf3
+    style L1 fill:#1a2435,stroke:#3b82f6,stroke-width:1px,color:#e6edf3
+    style Sources fill:#21283b,stroke:#6e7681,stroke-width:1px,color:#e6edf3
+    </pre>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Terralogiq (GCP Infrastructure)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Axiara.AI (AI/ML + Governance)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Shared (Terralogiq + Axiara)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2dd4bf"></div> Activation Partners (MoEngage + Arsi)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C41E3A"></div> SENTINEL Governance (spans all layers)</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 2: DATA FLOW PIPELINE                       -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 2: Data Flow Pipeline — Batch & Real-Time Paths
+    <span class="badge badge-tech">Technical View</span>
+  </h2>
+  <p class="diagram-desc">
+    Detailed data flow showing how data moves from source systems through the dual-speed architecture
+    (batch + real-time) into BigQuery, the CDP Core, and out to activation platforms.
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1c2333', 'primaryTextColor': '#e6edf3', 'primaryBorderColor': '#3b82f6', 'lineColor': '#8b949e', 'fontSize': '12px' }}}%%
+flowchart LR
+    subgraph SOURCES["📥 Data Sources"]
+        direction TB
+        S_BATCH["🗄️ Batch Sources<br/>───────────<br/>ancol.com DB<br/>Loyalty DB<br/>Hotel Booking<br/>F&B POS<br/>OTA Partners<br/>NPS/CSAT Surveys"]
+        S_RT["⚡ Real-Time Sources<br/>───────────<br/>Wahana Checkpoint POS<br/>Arsi (WhatsApp/Voice)<br/>MoEngage Events<br/>Ancol App Events<br/>Telkom Movement<br/>Wi-Fi Connect"]
+    end
+
+    subgraph INGEST["📡 Ingestion Layer"]
+        direction TB
+        BATCH_PIPE["Dataflow Batch<br/>CDC Connectors<br/>Hourly / Nightly"]
+        PUBSUB["Cloud Pub/Sub<br/>Event Bus<br/>Real-Time Topics"]
+        STREAM_PIPE["Dataflow Streaming<br/>Event Processing<br/>Sub-minute"]
+    end
+
+    subgraph GOVERN["🔒 Processing & Governance"]
+        direction TB
+        DLP["Cloud DLP<br/>PII Detection<br/>De-identification<br/>Tokenization"]
+        STANDARD["Standardization<br/>Pipeline<br/>───────────<br/>Phone → E.164<br/>Dates → UTC<br/>Currency → IDR<br/>Schema Validation"]
+        SENTINEL_G["SENTINEL<br/>Policy Engine<br/>Consent Check<br/>Retention Rules"]
+    end
+
+    subgraph STORAGE["🗄️ BigQuery Data Warehouse"]
+        direction TB
+        RAW["Raw Zone<br/>ancol_raw_*<br/>Exact ingested data<br/>36-month retention"]
+        STD["Standardized Zone<br/>ancol_std_*<br/>Cleaned & normalized<br/>PII de-identified"]
+        CURATED["Curated Zone<br/>ancol_curated_*<br/>───────────<br/>dim_customer<br/>fact_visits<br/>fact_transactions<br/>fact_interactions<br/>agg_customer_metrics<br/>dim_segments"]
+    end
+
+    REDIS["⚡ Redis Hot Cache<br/>Active visitor profiles<br/>Current segments<br/>Propensity scores<br/>Sub-ms reads"]
+
+    subgraph CDP_CORE["⚙️ CDP Core Engine"]
+        direction TB
+        ID_RES["Identity Resolution<br/>───────────<br/>Deterministic Match<br/>Probabilistic Match<br/>Graph Closure<br/>→ ancol_customer_id"]
+        SEG["Segmentation Engine<br/>───────────<br/>Rule-based (hourly)<br/>ML-driven (daily)<br/>Real-time (per event)"]
+        ESP["Event Stream Processor<br/>───────────<br/>Trigger Rule Evaluation<br/>Context Enrichment<br/>Action Routing"]
+        DNA["Customer DNA Profiler<br/>───────────<br/>Thrill Preference<br/>Spending Propensity<br/>Group Orientation<br/>Channel Preference<br/>Property Interest"]
+    end
+
+    subgraph AI_ML["🧠 Vertex AI"]
+        direction TB
+        AI1["Predictive Models<br/>───────────<br/>Footfall Forecast<br/>Churn Prediction<br/>Return-Visit Propensity"]
+        AI2["Revenue Models<br/>───────────<br/>Dynamic Pricing<br/>Cross-Sell Scoring<br/>Bundle Optimization"]
+        AI3["Experience Models<br/>───────────<br/>Recommendations<br/>Sentiment Analysis<br/>Next-Best-Action"]
+    end
+
+    subgraph ACTIVATE["📡 Activation Layer"]
+        direction TB
+        ORCH["Custom Orchestrator<br/>───────────<br/>Channel Selection<br/>Frequency Capping<br/>A/B Routing<br/>Conflict Resolution"]
+        MOE["MoEngage<br/>───────────<br/>Email Campaigns<br/>Push Notifications<br/>Web Personalization<br/>In-App Messages<br/>Journey Builder"]
+        ARSI["Arsi Contact Center<br/>───────────<br/>WhatsApp (In/Out)<br/>Voice Calls<br/>Live Chat<br/>Social DMs<br/>Smart IVR"]
+    end
+
+    LOOKER["📊 Looker Dashboards<br/>───────────<br/>Executive Command Center<br/>CX Operations<br/>VoC Dashboard<br/>Marketing Performance<br/>Property Pipeline"]
+
+    %% Flow connections
+    S_BATCH --> BATCH_PIPE
+    S_RT --> PUBSUB
+    PUBSUB --> STREAM_PIPE
+
+    BATCH_PIPE --> DLP
+    STREAM_PIPE --> DLP
+    DLP --> STANDARD
+    STANDARD --> SENTINEL_G
+
+    SENTINEL_G --> RAW
+    RAW --> STD
+    STD --> CURATED
+
+    CURATED --> ID_RES
+    CURATED --> SEG
+    CURATED --> DNA
+    CURATED --> AI_ML
+    CURATED --> LOOKER
+
+    PUBSUB -.->|"Real-time events"| ESP
+    REDIS <-->|"Profile read/write"| ESP
+    REDIS <-->|"Profile cache sync"| CURATED
+
+    ID_RES --> SEG
+    ID_RES --> DNA
+    SEG --> ESP
+    DNA --> AI_ML
+
+    AI_ML --> ESP
+    AI_ML --> CURATED
+    AI3 -.->|"Real-time inference"| ESP
+
+    ESP --> ORCH
+    ORCH --> MOE
+    ORCH --> ARSI
+
+    MOE -.->|"Engagement events back"| PUBSUB
+    ARSI -.->|"Interaction events back"| PUBSUB
+
+    SEG -->|"Segment sync"| MOE
+
+    style SOURCES fill:#1a2435,stroke:#6e7681,color:#e6edf3
+    style INGEST fill:#1a2435,stroke:#3b82f6,color:#e6edf3
+    style GOVERN fill:#2a1525,stroke:#C41E3A,color:#e6edf3
+    style STORAGE fill:#1a2a25,stroke:#34d399,color:#e6edf3
+    style CDP_CORE fill:#1a2435,stroke:#f59e0b,color:#e6edf3
+    style AI_ML fill:#2a1f35,stroke:#a78bfa,color:#e6edf3
+    style ACTIVATE fill:#1a2a25,stroke:#2dd4bf,color:#e6edf3
+    style REDIS fill:#2a1525,stroke:#E8384F,color:#e6edf3
+    style LOOKER fill:#1a2435,stroke:#3b82f6,color:#e6edf3
+    </pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 3: IDENTITY RESOLUTION FLOW                 -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 3: Identity Resolution Engine — Three-Phase Matching
+    <span class="badge badge-tech">Technical View</span>
+  </h2>
+  <p class="diagram-desc">
+    The identity resolution process that merges fragmented customer records from multiple source systems
+    into a single golden record (dim_customer) with a persistent ancol_customer_id.
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1c2333', 'primaryTextColor': '#e6edf3', 'primaryBorderColor': '#3b82f6', 'lineColor': '#8b949e', 'fontSize': '12px' }}}%%
+flowchart TB
+    subgraph INPUT["Fragmented Identity Records"]
+        R1["ancol.com<br/>email: budi@mail.com<br/>name: Budi Santoso"]
+        R2["WhatsApp (Arsi)<br/>phone: +6281234567890<br/>chat: asking Dufan prices"]
+        R3["Loyalty Program<br/>loyalty_id: ANC-50123<br/>email: budi@mail.com"]
+        R4["Wahana POS<br/>gelang_id: GEL-99887<br/>linked to ticket TKT-445"]
+        R5["Telkom Movement<br/>device_id: DEV-XYZ<br/>location: Ancol geofence"]
+        R6["F&B POS<br/>payment: Visa *4589<br/>no identity key"]
+    end
+
+    subgraph PHASE1["Phase 1: Deterministic Matching (resolves ~65%)"]
+        DM["Exact Match Engine<br/>───────────<br/>Match on: email, phone,<br/>loyalty_id, gelang_id"]
+        LINK1["✅ R1 ↔ R3<br/>Same email:<br/>budi@mail.com"]
+        LINK2["✅ R4 linked via<br/>ticket purchase to R1<br/>TKT-445 → budi@mail.com"]
+    end
+
+    subgraph PHASE2["Phase 2: Probabilistic Matching (resolves ~15% more)"]
+        PM["Fuzzy Match Engine<br/>───────────<br/>Name similarity +<br/>same visit date +<br/>payment pattern"]
+        LINK3["🔶 R6 → R1?<br/>Same Visa *4589 used<br/>on ancol.com checkout<br/>Confidence: 87%"]
+    end
+
+    subgraph PHASE3["Phase 3: Graph-Based Resolution (resolves ~5% more)"]
+        GM["Transitive Closure<br/>───────────<br/>If A=B and B=C<br/>then A=B=C"]
+        LINK4["🔗 R2 → R1 → R3<br/>Phone from WhatsApp<br/>linked via OTP verification<br/>on ancol.com account"]
+    end
+
+    subgraph OUTPUT["Unified Golden Record"]
+        GOLDEN["dim_customer<br/>═══════════════<br/>ancol_customer_id: BUDI-001<br/>───────────<br/>name: Budi Santoso<br/>email: budi@mail.com<br/>phone: +6281234567890<br/>loyalty_id: ANC-50123<br/>gelang_id: GEL-99887<br/>device_id: DEV-XYZ<br/>payment_tokens: [Visa *4589]<br/>───────────<br/>identity_confidence: 94%<br/>sources_merged: 6<br/>last_resolved: 2026-03-08"]
+    end
+
+    UNRESOLVED["⚠️ R5 (Telkom)<br/>Cannot resolve —<br/>anonymized device_id<br/>→ Aggregated analytics only"]
+
+    INPUT --> PHASE1
+    PHASE1 --> PHASE2
+    PHASE2 --> PHASE3
+    PHASE3 --> OUTPUT
+    R5 --> UNRESOLVED
+
+    style INPUT fill:#1a2435,stroke:#6e7681,color:#e6edf3
+    style PHASE1 fill:#1a2a25,stroke:#34d399,color:#e6edf3
+    style PHASE2 fill:#1a2435,stroke:#f59e0b,color:#e6edf3
+    style PHASE3 fill:#2a1f35,stroke:#a78bfa,color:#e6edf3
+    style OUTPUT fill:#1a2a25,stroke:#2dd4bf,stroke-width:3px,color:#e6edf3
+    style UNRESOLVED fill:#2a1525,stroke:#C41E3A,color:#e6edf3
+    </pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 4: REAL-TIME PATH (BUDI JOURNEY)            -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 4: Real-Time Data Path — The Budi Visitor Journey
+    <span class="badge badge-cx">Customer Experience View</span>
+  </h2>
+  <p class="diagram-desc">
+    Sequence diagram showing the complete real-time flow when a visitor (Budi) triggers a contextual
+    recommendation during their park visit. Target: under 60 seconds from trigger event to WhatsApp delivery.
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'actorTextColor': '#e6edf3', 'actorBorder': '#3b82f6', 'actorBkg': '#1c2333', 'signalColor': '#8b949e', 'signalTextColor': '#e6edf3', 'labelBoxBkgColor': '#21283b', 'labelBoxBorderColor': '#3b82f6', 'labelTextColor': '#e6edf3', 'noteBkgColor': '#2a1525', 'noteTextColor': '#e6edf3', 'noteBorderColor': '#C41E3A', 'activationBkgColor': '#1c2333', 'activationBorderColor': '#3b82f6', 'sequenceNumberColor': '#e6edf3', 'fontSize': '13px' }}}%%
+sequenceDiagram
+    actor Budi as 🧑 Budi<br/>(Ancol Visitor)
+    participant WC as 📱 Wahana<br/>Checkpoint POS
+    participant PS as ☁️ Cloud<br/>Pub/Sub
+    participant ESP as ⚡ Event Stream<br/>Processor
+    participant Redis as 🔴 Redis<br/>Hot Cache
+    participant VAI as 🧠 Vertex AI<br/>Recommendation
+    participant ORCH as 🎯 Custom<br/>Orchestrator
+    participant ARSI as 💬 Arsi<br/>WhatsApp
+
+    rect rgba(59, 130, 246, 0.1)
+        Note over Budi,ARSI: PHASE 2: ON-SITE TRACKING
+        Budi->>WC: Taps gelang at Dufan gate
+        WC->>PS: Publish: wahana_tap event<br/>{gelang_id, venue: dufan, time}
+        Budi->>WC: Taps gelang at Halilintar
+        WC->>PS: Publish: wahana_tap event<br/>{gelang_id, venue: halilintar, time}
+    end
+
+    rect rgba(245, 158, 11, 0.1)
+        Note over Budi,ARSI: PHASE 3: ANALYTICS & ACTION (Target: <60 seconds)
+        PS->>ESP: Stream events to processor
+        ESP->>Redis: Lookup: BUDI-001 profile<br/>(sub-millisecond)
+        Redis-->>ESP: Profile: 3hrs in park,<br/>no F&B transaction, temp 33°C
+        Note over ESP: Trigger Rule Match:<br/>"outdoor >2hrs AND no F&B<br/>AND temp >30°C"<br/>→ FIRE: F&B Recommendation
+        ESP->>VAI: Request: recommendation<br/>for BUDI-001, context: hungry
+        VAI-->>ESP: Response: Bandar Djakarta,<br/>20% discount, nearest resto
+        ESP->>ORCH: Trigger action:<br/>send F&B offer to Budi
+        Note over ORCH: Channel check:<br/>✅ No msg sent today<br/>✅ WhatsApp preferred<br/>✅ Within frequency cap
+        ORCH->>ARSI: Send WhatsApp:<br/>"Hey Budi! Capek main?<br/>Klaim diskon 20%<br/>di Resto terdekat!"
+        ARSI->>Budi: 💬 WhatsApp message<br/>with coupon deep link
+    end
+
+    rect rgba(45, 212, 191, 0.1)
+        Note over Budi,ARSI: CONVERSION & FEEDBACK LOOP
+        Budi->>WC: Redeems coupon at Resto POS
+        WC->>PS: Publish: transaction event<br/>{BUDI-001, resto, IDR 150K}
+        PS->>ESP: Process transaction
+        ESP->>Redis: Update profile:<br/>+1 F&B transaction,<br/>coupon redeemed = true
+        Note over ESP: Update Customer DNA:<br/>dining_preference updated,<br/>coupon_responsiveness: high
+    end
+    </pre>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> On-site tracking events (~instant)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Real-time processing path (target &lt;60s total)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2dd4bf"></div> Conversion & feedback loop (continuous)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C41E3A"></div> Decision points (trigger rules + orchestration)</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 5: GCP COMPONENT ARCHITECTURE               -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 5: GCP Component Architecture — Technology Stack
+    <span class="badge badge-tech">Technical View</span>
+  </h2>
+  <p class="diagram-desc">
+    Detailed Google Cloud Platform component diagram showing specific GCP services used at each layer,
+    with the external integrations (MoEngage, Arsi, Telkom) and their connection patterns.
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1c2333', 'primaryTextColor': '#e6edf3', 'primaryBorderColor': '#3b82f6', 'lineColor': '#8b949e', 'fontSize': '11px' }}}%%
+flowchart TB
+    subgraph EXTERNAL["External Systems & Partners"]
+        direction LR
+        EXT_ANCOL["ancol.com<br/>Ticketing DB<br/>(PostgreSQL/MySQL)"]
+        EXT_LOYALTY["Loyalty Program<br/>Database"]
+        EXT_POS["F&B POS<br/>Systems"]
+        EXT_HOTEL["Hotel Booking<br/>System"]
+        EXT_OTA["OTA APIs<br/>Traveloka<br/>Tiket.com"]
+        EXT_MOE["MoEngage<br/>SaaS Platform"]
+        EXT_ARSI["Arsi<br/>Contact Center"]
+        EXT_TELKOM["Telkom<br/>Movement Data"]
+        EXT_WAHANA["Wahana<br/>Checkpoint POS<br/>(New Hardware)"]
+    end
+
+    subgraph GCP["Google Cloud Platform"]
+
+        subgraph INGEST_GCP["Ingestion Services"]
+            direction LR
+            PUBSUB_T["Cloud Pub/Sub<br/>───────────<br/>Topics:<br/>ancol-wahana-events<br/>ancol-contact-events<br/>ancol-engagement-events<br/>ancol-app-events<br/>ancol-movement-events"]
+            DATAFLOW_B["Dataflow<br/>(Batch)<br/>───────────<br/>JDBC Connectors<br/>CDC Processing<br/>File Ingestion"]
+            DATAFLOW_S["Dataflow<br/>(Streaming)<br/>───────────<br/>Event Processing<br/>Windowed Aggregation<br/>Trigger Evaluation"]
+        end
+
+        subgraph PROCESS_GCP["Processing & Security"]
+            direction LR
+            DLP_GCP["Cloud DLP<br/>───────────<br/>PII Detection<br/>De-identification<br/>Tokenization<br/>Sensitivity Labels"]
+            CLOUDRUN_STD["Cloud Run<br/>───────────<br/>Standardization<br/>Microservices<br/>Schema Validation<br/>Format Normalization"]
+        end
+
+        subgraph STORAGE_GCP["Storage Services"]
+            direction LR
+            BQ["BigQuery<br/>═══════════<br/>Raw Zone (36mo)<br/>Standardized Zone (24mo)<br/>Curated Zone (indefinite)<br/>───────────<br/>dim_customer<br/>fact_visits<br/>fact_transactions<br/>fact_interactions<br/>agg_customer_metrics<br/>dim_segments"]
+            REDIS_GCP["Memorystore<br/>(Redis)<br/>───────────<br/>Hot Profile Cache<br/>Active Segments<br/>Propensity Scores<br/>Session State"]
+            GCS["Cloud Storage<br/>───────────<br/>File Staging<br/>Model Artifacts<br/>Backups"]
+        end
+
+        subgraph COMPUTE_GCP["CDP Core & AI Compute"]
+            direction LR
+            DATAFORM["Dataform<br/>───────────<br/>SQL Transformations<br/>Identity Resolution<br/>(Batch Mode)<br/>Segment Computation"]
+            CLOUDRUN_CDP["Cloud Run<br/>───────────<br/>Real-time ID Resolution<br/>Event Stream Processor<br/>Custom Orchestrator<br/>API Gateway"]
+            VERTEX["Vertex AI<br/>═══════════<br/>Training Pipelines<br/>Model Registry<br/>Prediction Endpoints<br/>───────────<br/>Footfall Forecast<br/>Dynamic Pricing<br/>Recommendations<br/>Sentiment Analysis<br/>Churn Prediction<br/>Cross-Sell Scoring"]
+            FUNCTIONS["Cloud Functions<br/>───────────<br/>Trigger Handlers<br/>Profile Cache Sync<br/>Webhook Processing<br/>MoEngage/Arsi API"]
+        end
+
+        subgraph VIZ_GCP["Visualization"]
+            LOOKER_GCP["Looker<br/>───────────<br/>Connected to BigQuery<br/>Executive Dashboard<br/>CX Operations<br/>VoC Dashboard<br/>Marketing Performance"]
+        end
+
+        subgraph GOV_GCP["Governance & Security"]
+            direction LR
+            IAM["Cloud IAM<br/>RBAC + Column-level"]
+            AUDIT["Cloud Audit Logs<br/>All access tracked"]
+            SENTINEL_GCP["SENTINEL<br/>(Axiara)<br/>───────────<br/>AI Model Monitoring<br/>Bias Detection<br/>Drift Alerts<br/>Kill-Switch<br/>UU PDP Compliance"]
+            VPC["VPC Service Controls<br/>Network Isolation"]
+        end
+    end
+
+    %% External connections
+    EXT_ANCOL --> DATAFLOW_B
+    EXT_LOYALTY --> DATAFLOW_B
+    EXT_POS --> DATAFLOW_B
+    EXT_HOTEL --> DATAFLOW_B
+    EXT_OTA --> DATAFLOW_B
+
+    EXT_WAHANA --> PUBSUB_T
+    EXT_ARSI <--> PUBSUB_T
+    EXT_MOE <--> PUBSUB_T
+    EXT_TELKOM --> PUBSUB_T
+
+    %% Internal GCP flow
+    PUBSUB_T --> DATAFLOW_S
+    DATAFLOW_B --> DLP_GCP
+    DATAFLOW_S --> DLP_GCP
+    DLP_GCP --> CLOUDRUN_STD
+    CLOUDRUN_STD --> BQ
+    DATAFLOW_S -.-> GCS
+
+    BQ --> DATAFORM
+    DATAFORM --> BQ
+    BQ <--> CLOUDRUN_CDP
+    BQ --> VERTEX
+    VERTEX --> BQ
+    VERTEX <--> CLOUDRUN_CDP
+    BQ <--> REDIS_GCP
+    REDIS_GCP <--> CLOUDRUN_CDP
+
+    PUBSUB_T -.-> CLOUDRUN_CDP
+    CLOUDRUN_CDP --> FUNCTIONS
+    FUNCTIONS --> EXT_MOE
+    FUNCTIONS --> EXT_ARSI
+
+    BQ --> LOOKER_GCP
+
+    style EXTERNAL fill:#21283b,stroke:#6e7681,color:#e6edf3
+    style GCP fill:#0f1117,stroke:#3b82f6,stroke-width:2px,color:#e6edf3
+    style INGEST_GCP fill:#1a2435,stroke:#3b82f6,color:#e6edf3
+    style PROCESS_GCP fill:#2a1525,stroke:#C41E3A,color:#e6edf3
+    style STORAGE_GCP fill:#1a2a25,stroke:#34d399,color:#e6edf3
+    style COMPUTE_GCP fill:#2a1f35,stroke:#a78bfa,color:#e6edf3
+    style VIZ_GCP fill:#1a2435,stroke:#3b82f6,color:#e6edf3
+    style GOV_GCP fill:#2a1525,stroke:#C41E3A,color:#e6edf3
+    </pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DIAGRAM 6: IMPLEMENTATION PHASES                    -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="diagram-section">
+  <h2>
+    Diagram 6: Implementation Roadmap — Phased Delivery
+    <span class="badge badge-exec">Executive View</span>
+  </h2>
+  <p class="diagram-desc">
+    Gantt-style timeline showing the five implementation phases, with each phase delivering
+    incremental value and concluding with a Go/No-Go gate.
+  </p>
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': { 'fontSize': '12px', 'primaryColor': '#1c2333', 'primaryTextColor': '#e6edf3' }}}%%
+gantt
+    title Ancol 360° CDP Implementation Timeline
+    dateFormat YYYY-MM-DD
+    axisFormat %b %Y
+
+    section Phase 0: Discovery
+    NDA Execution & System Inventory     :p0a, 2026-04-01, 3w
+    Data Quality Audit & API Assessment  :p0b, after p0a, 2w
+    Architecture Refinement              :p0c, after p0a, 2w
+    Go/No-Go Gate 0                      :milestone, after p0c, 0d
+
+    section Phase 1: Foundation
+    GCP Project & BigQuery Setup         :p1a, after p0c, 2w
+    Batch Ingestion (ancol.com + Loyalty):p1b, after p1a, 3w
+    Cloud DLP Pipeline                   :p1c, after p1a, 2w
+    Basic Identity Resolution            :p1d, after p1b, 3w
+    Basic Looker Dashboards              :p1e, after p1d, 2w
+    Go/No-Go Gate 1                      :milestone, after p1e, 0d
+
+    section Phase 2: Real-Time Core
+    Pub/Sub Event Bus Setup              :p2a, after p1e, 2w
+    Wahana POS Integration               :p2b, after p2a, 3w
+    Dataflow Streaming Pipeline          :p2c, after p2a, 3w
+    Redis Hot Cache                      :p2d, after p2c, 2w
+    MoEngage Bidirectional Sync          :p2e, after p2c, 2w
+    Real-time Identity Resolution        :p2f, after p2d, 2w
+    Go/No-Go Gate 2                      :milestone, after p2f, 0d
+
+    section Phase 3: Intelligence
+    Vertex AI Model Training             :p3a, after p2f, 4w
+    Event Stream Processor               :p3b, after p2f, 3w
+    Arsi Integration                     :p3c, after p2f, 3w
+    Custom Orchestrator                  :p3d, after p3b, 2w
+    Recommendation Engine (Real-time)    :p3e, after p3a, 3w
+    Sentiment Analysis Model             :p3f, after p3a, 2w
+    Go/No-Go Gate 3                      :milestone, after p3e, 0d
+
+    section Phase 4: Advanced AI
+    Dynamic Pricing Model                :p4a, after p3e, 3w
+    Churn Prediction                     :p4b, after p3e, 2w
+    Property Cross-Sell Scoring          :p4c, after p3e, 3w
+    Customer DNA Profiler                :p4d, after p4b, 3w
+    VoC Dashboard                        :p4e, after p4d, 2w
+    SENTINEL Full Deployment             :p4f, after p4d, 2w
+    Go/No-Go Gate 4                      :milestone, after p4f, 0d
+    </pre>
+  </div>
+</div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#0f1117',
+      primaryColor: '#1c2333',
+      primaryTextColor: '#e6edf3',
+      primaryBorderColor: '#3b82f6',
+      lineColor: '#6e7681',
+      secondaryColor: '#21283b',
+      tertiaryColor: '#161b22',
+    },
+    flowchart: {
+      curve: 'basis',
+      padding: 15,
+      useMaxWidth: true,
+    },
+    sequence: {
+      useMaxWidth: true,
+      actorMargin: 40,
+      messageMargin: 30,
+    },
+    gantt: {
+      useMaxWidth: true,
+      barHeight: 20,
+      barGap: 4,
+      topPadding: 50,
+      sidePadding: 50,
+    }
+  });
+</script>
+
+</body>
+</html>

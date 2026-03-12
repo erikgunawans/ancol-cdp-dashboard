@@ -1,0 +1,55 @@
+%%{init: {'theme': 'default'}}%%
+sequenceDiagram
+    actor Budi as Budi (Ancol Visitor)
+    participant WC as Wahana Checkpoint POS
+    participant PS as Cloud Pub/Sub
+    participant ESP as Event Stream Processor
+    participant Redis as Redis Hot Cache
+    participant VAI as Vertex AI Recommendation
+    participant ORCH as Custom Orchestrator
+    participant ARSI as Arsi WhatsApp
+
+    rect rgb(230, 240, 255)
+        Note over Budi,ARSI: PHASE 1: PRE-VISIT & INGESTION
+        Budi->>ARSI: Asks ticket price via WhatsApp
+        ARSI->>PS: Ingest: WA number + chat intent (Interest: Dufan)
+        Budi->>WC: Buys ticket online (email: budi@mail.com)
+        WC->>PS: Ingest: Email + identity (PII via DLP)
+        PS->>Redis: Identity Resolution: Link WA + Email = Unique ID: BUDI-001
+    end
+
+    rect rgb(230, 255, 240)
+        Note over Budi,ARSI: PHASE 2: ON-SITE TRACKING
+        Budi->>WC: Taps QR/Gelang at Dufan Gate (Checkpoint 1)
+        WC->>PS: Publish: wahana_tap {gelang_id, venue: dufan_gate}
+        PS->>Redis: Movement data: User entered Dufan area
+        Budi->>WC: Taps at Wahana Halilintar (Checkpoint 2)
+        WC->>PS: Publish: wahana_tap {gelang_id, venue: halilintar}
+        PS->>Redis: Behavioral Update: High-Thrill Preference
+    end
+
+    rect rgb(255, 245, 230)
+        Note over Budi,ARSI: PHASE 3: DATA ANALYTICS & ACTION (Target under 60s)
+        PS->>ESP: Stream event to processor
+        ESP->>Redis: Lookup: BUDI-001 profile (sub-ms)
+        Redis-->>ESP: Context: 3hrs in park, no F&B, temp 33C
+        Note over ESP: TRIGGER MATCH: outdoor >2hrs<br/>AND no F&B AND temp >30C<br/>= FIRE F&B Recommendation
+        ESP->>VAI: Request recommendation for BUDI-001
+        VAI-->>ESP: Bandar Djakarta, 20% discount, nearest
+        ESP->>ORCH: Trigger: send F&B offer to Budi
+        Note over ORCH: Channel check:<br/>No msg sent today = OK<br/>WhatsApp preferred = OK<br/>Within frequency cap = OK
+        ORCH->>ARSI: Send WhatsApp message with coupon
+        ARSI->>Budi: Hey Budi! Capek main? Klaim diskon 20% di Resto terdekat!
+    end
+
+    rect rgb(240, 255, 245)
+        Note over Budi,ARSI: PHASE 4: POST-VISIT
+        Budi->>WC: Clicks coupon and eats at Resto
+        WC->>PS: Publish: transaction {BUDI-001, resto, IDR 150K, coupon_redeemed}
+        PS->>ESP: Process transaction event
+        ESP->>Redis: Update profile: +1 F&B txn, coupon_responsive = true
+        Note over ESP: Update Customer DNA:<br/>dining_preference updated<br/>coupon_responsiveness: high
+        Note over Budi: Next day: MoEngage sends post-visit survey email
+        Budi->>PS: Submits NPS rating via email survey
+        PS->>ESP: Sentiment Analysis + Lifetime Value Update
+    end

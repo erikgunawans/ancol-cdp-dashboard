@@ -1,0 +1,46 @@
+%%{init: {'theme': 'default'}}%%
+gantt
+    title Ancol 360 CDP Implementation Timeline
+    dateFormat YYYY-MM-DD
+    axisFormat %b %Y
+
+    section Phase 0: Discovery
+    NDA Execution and System Inventory     :p0a, 2026-04-01, 3w
+    Data Quality Audit and API Assessment  :p0b, after p0a, 2w
+    Architecture Refinement                :p0c, after p0a, 2w
+    Go/No-Go Gate 0                        :milestone, after p0c, 0d
+
+    section Phase 1: Foundation
+    GCP Project and BigQuery Setup         :p1a, after p0c, 2w
+    Batch Ingestion ancol.com and Loyalty  :p1b, after p1a, 3w
+    Cloud DLP Pipeline                     :p1c, after p1a, 2w
+    Basic Identity Resolution              :p1d, after p1b, 3w
+    Basic Looker Dashboards                :p1e, after p1d, 2w
+    Go/No-Go Gate 1                        :milestone, after p1e, 0d
+
+    section Phase 2: Real-Time Core
+    Pub/Sub Event Bus Setup                :p2a, after p1e, 2w
+    Wahana POS Integration                 :p2b, after p2a, 3w
+    Dataflow Streaming Pipeline            :p2c, after p2a, 3w
+    Redis Hot Cache                        :p2d, after p2c, 2w
+    MoEngage Bidirectional Sync            :p2e, after p2c, 2w
+    Real-time Identity Resolution          :p2f, after p2d, 2w
+    Go/No-Go Gate 2                        :milestone, after p2f, 0d
+
+    section Phase 3: Intelligence
+    Vertex AI Model Training               :p3a, after p2f, 4w
+    Event Stream Processor                 :p3b, after p2f, 3w
+    Arsi Integration                       :p3c, after p2f, 3w
+    Custom Orchestrator                    :p3d, after p3b, 2w
+    Recommendation Engine Real-time        :p3e, after p3a, 3w
+    Sentiment Analysis Model               :p3f, after p3a, 2w
+    Go/No-Go Gate 3                        :milestone, after p3e, 0d
+
+    section Phase 4: Advanced AI
+    Dynamic Pricing Model                  :p4a, after p3e, 3w
+    Churn Prediction                       :p4b, after p3e, 2w
+    Property Cross-Sell Scoring            :p4c, after p3e, 3w
+    Customer DNA Profiler                  :p4d, after p4b, 3w
+    VoC Dashboard                          :p4e, after p4d, 2w
+    SENTINEL Full Deployment               :p4f, after p4d, 2w
+    Go/No-Go Gate 4                        :milestone, after p4f, 0d

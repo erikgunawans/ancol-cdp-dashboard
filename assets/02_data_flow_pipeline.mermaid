@@ -1,0 +1,95 @@
+%%{init: {'theme': 'default'}}%%
+flowchart LR
+    subgraph SOURCES["Data Sources"]
+        direction TB
+        S_BATCH["Batch Sources\n- ancol.com DB\n- Loyalty DB\n- Hotel Booking\n- F&B POS\n- OTA Partners\n- NPS/CSAT Surveys"]
+        S_RT["Real-Time Sources\n- Wahana Checkpoint POS\n- Arsi WhatsApp/Voice\n- MoEngage Events\n- Ancol App Events\n- Telkom Movement\n- Wi-Fi Connect"]
+    end
+
+    subgraph INGEST["Ingestion Layer"]
+        direction TB
+        BATCH_PIPE["Dataflow Batch\nCDC Connectors\nHourly / Nightly"]
+        PUBSUB["Cloud Pub/Sub\nEvent Bus\nReal-Time Topics"]
+        STREAM_PIPE["Dataflow Streaming\nEvent Processing\nSub-minute"]
+    end
+
+    subgraph GOVERN["Processing & Governance"]
+        direction TB
+        DLP["Cloud DLP\nPII Detection\nDe-identification\nTokenization"]
+        STANDARD["Standardization Pipeline\nPhone to E.164\nDates to UTC\nCurrency to IDR\nSchema Validation"]
+        SENTINEL_G["SENTINEL Policy Engine\nConsent Check\nRetention Rules"]
+    end
+
+    subgraph STORAGE["BigQuery Data Warehouse"]
+        direction TB
+        RAW["Raw Zone\nancol_raw_*\nExact ingested data\n36-month retention"]
+        STD["Standardized Zone\nancol_std_*\nCleaned and normalized\nPII de-identified"]
+        CURATED["Curated Zone\nancol_curated_*\n- dim_customer\n- fact_visits\n- fact_transactions\n- fact_interactions\n- agg_customer_metrics\n- dim_segments"]
+    end
+
+    REDIS["Redis Hot Cache\nActive visitor profiles\nCurrent segments\nPropensity scores\nSub-ms reads"]
+
+    subgraph CDP_CORE["CDP Core Engine"]
+        direction TB
+        ID_RES["Identity Resolution\nDeterministic Match\nProbabilistic Match\nGraph Closure\n= ancol_customer_id"]
+        SEG["Segmentation Engine\nRule-based hourly\nML-driven daily\nReal-time per event"]
+        ESP["Event Stream Processor\nTrigger Rule Evaluation\nContext Enrichment\nAction Routing"]
+        DNA["Customer DNA Profiler\nThrill Preference\nSpending Propensity\nGroup Orientation\nChannel Preference\nProperty Interest"]
+    end
+
+    subgraph AI_ML["Vertex AI"]
+        direction TB
+        AI1["Predictive Models\nFootfall Forecast\nChurn Prediction\nReturn-Visit Propensity"]
+        AI2["Revenue Models\nDynamic Pricing\nCross-Sell Scoring\nBundle Optimization"]
+        AI3["Experience Models\nRecommendations\nSentiment Analysis\nNext-Best-Action"]
+    end
+
+    subgraph ACTIVATE["Activation Layer"]
+        direction TB
+        ORCH["Custom Orchestrator\nChannel Selection\nFrequency Capping\nA/B Routing\nConflict Resolution"]
+        MOE["MoEngage\nEmail Campaigns\nPush Notifications\nWeb Personalization\nIn-App Messages\nJourney Builder"]
+        ARSI["Arsi Contact Center\nWhatsApp In/Out\nVoice Calls\nLive Chat\nSocial DMs\nSmart IVR"]
+    end
+
+    LOOKER["Looker Dashboards\nExecutive Command Center\nCX Operations\nVoC Dashboard\nMarketing Performance\nProperty Pipeline"]
+
+    S_BATCH --> BATCH_PIPE
+    S_RT --> PUBSUB
+    PUBSUB --> STREAM_PIPE
+
+    BATCH_PIPE --> DLP
+    STREAM_PIPE --> DLP
+    DLP --> STANDARD
+    STANDARD --> SENTINEL_G
+
+    SENTINEL_G --> RAW
+    RAW --> STD
+    STD --> CURATED
+
+    CURATED --> ID_RES
+    CURATED --> SEG
+    CURATED --> DNA
+    CURATED --> AI_ML
+    CURATED --> LOOKER
+
+    PUBSUB -.->|"Real-time events"| ESP
+    REDIS <-->|"Profile read/write"| ESP
+    REDIS <-->|"Profile cache sync"| CURATED
+
+    ID_RES --> SEG
+    ID_RES --> DNA
+    SEG --> ESP
+    DNA --> AI_ML
+
+    AI_ML --> ESP
+    AI_ML --> CURATED
+    AI3 -.->|"Real-time inference"| ESP
+
+    ESP --> ORCH
+    ORCH --> MOE
+    ORCH --> ARSI
+
+    MOE -.->|"Engagement events back"| PUBSUB
+    ARSI -.->|"Interaction events back"| PUBSUB
+
+    SEG -->|"Segment sync"| MOE
